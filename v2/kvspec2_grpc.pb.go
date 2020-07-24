@@ -20,6 +20,7 @@ type PublicClient interface {
 	Query(ctx context.Context, in *ObjectReader, opts ...grpc.CallOption) (*ObjectResult, error)
 	Commit(ctx context.Context, in *ObjectWriter, opts ...grpc.CallOption) (*ObjectResult, error)
 	BatchCommit(ctx context.Context, in *BatchRequest, opts ...grpc.CallOption) (*BatchResult, error)
+	SysCmd(ctx context.Context, in *SysCmdRequest, opts ...grpc.CallOption) (*ObjectResult, error)
 }
 
 type publicClient struct {
@@ -57,6 +58,15 @@ func (c *publicClient) BatchCommit(ctx context.Context, in *BatchRequest, opts .
 	return out, nil
 }
 
+func (c *publicClient) SysCmd(ctx context.Context, in *SysCmdRequest, opts ...grpc.CallOption) (*ObjectResult, error) {
+	out := new(ObjectResult)
+	err := c.cc.Invoke(ctx, "/kvspec2.Public/SysCmd", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PublicServer is the server API for Public service.
 // All implementations must embed UnimplementedPublicServer
 // for forward compatibility
@@ -64,6 +74,7 @@ type PublicServer interface {
 	Query(context.Context, *ObjectReader) (*ObjectResult, error)
 	Commit(context.Context, *ObjectWriter) (*ObjectResult, error)
 	BatchCommit(context.Context, *BatchRequest) (*BatchResult, error)
+	SysCmd(context.Context, *SysCmdRequest) (*ObjectResult, error)
 	mustEmbedUnimplementedPublicServer()
 }
 
@@ -79,6 +90,9 @@ func (*UnimplementedPublicServer) Commit(context.Context, *ObjectWriter) (*Objec
 }
 func (*UnimplementedPublicServer) BatchCommit(context.Context, *BatchRequest) (*BatchResult, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BatchCommit not implemented")
+}
+func (*UnimplementedPublicServer) SysCmd(context.Context, *SysCmdRequest) (*ObjectResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SysCmd not implemented")
 }
 func (*UnimplementedPublicServer) mustEmbedUnimplementedPublicServer() {}
 
@@ -140,6 +154,24 @@ func _Public_BatchCommit_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Public_SysCmd_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SysCmdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PublicServer).SysCmd(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kvspec2.Public/SysCmd",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PublicServer).SysCmd(ctx, req.(*SysCmdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Public_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "kvspec2.Public",
 	HandlerType: (*PublicServer)(nil),
@@ -156,6 +188,10 @@ var _Public_serviceDesc = grpc.ServiceDesc{
 			MethodName: "BatchCommit",
 			Handler:    _Public_BatchCommit_Handler,
 		},
+		{
+			MethodName: "SysCmd",
+			Handler:    _Public_SysCmd_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "kvspec2.proto",
@@ -167,6 +203,7 @@ var _Public_serviceDesc = grpc.ServiceDesc{
 type InternalClient interface {
 	Prepare(ctx context.Context, in *ObjectWriter, opts ...grpc.CallOption) (*ObjectResult, error)
 	Accept(ctx context.Context, in *ObjectWriter, opts ...grpc.CallOption) (*ObjectResult, error)
+	SysCmd(ctx context.Context, in *SysCmdRequest, opts ...grpc.CallOption) (*ObjectResult, error)
 }
 
 type internalClient struct {
@@ -195,12 +232,22 @@ func (c *internalClient) Accept(ctx context.Context, in *ObjectWriter, opts ...g
 	return out, nil
 }
 
+func (c *internalClient) SysCmd(ctx context.Context, in *SysCmdRequest, opts ...grpc.CallOption) (*ObjectResult, error) {
+	out := new(ObjectResult)
+	err := c.cc.Invoke(ctx, "/kvspec2.Internal/SysCmd", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // InternalServer is the server API for Internal service.
 // All implementations must embed UnimplementedInternalServer
 // for forward compatibility
 type InternalServer interface {
 	Prepare(context.Context, *ObjectWriter) (*ObjectResult, error)
 	Accept(context.Context, *ObjectWriter) (*ObjectResult, error)
+	SysCmd(context.Context, *SysCmdRequest) (*ObjectResult, error)
 	mustEmbedUnimplementedInternalServer()
 }
 
@@ -213,6 +260,9 @@ func (*UnimplementedInternalServer) Prepare(context.Context, *ObjectWriter) (*Ob
 }
 func (*UnimplementedInternalServer) Accept(context.Context, *ObjectWriter) (*ObjectResult, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Accept not implemented")
+}
+func (*UnimplementedInternalServer) SysCmd(context.Context, *SysCmdRequest) (*ObjectResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SysCmd not implemented")
 }
 func (*UnimplementedInternalServer) mustEmbedUnimplementedInternalServer() {}
 
@@ -256,6 +306,24 @@ func _Internal_Accept_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Internal_SysCmd_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SysCmdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InternalServer).SysCmd(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kvspec2.Internal/SysCmd",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InternalServer).SysCmd(ctx, req.(*SysCmdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Internal_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "kvspec2.Internal",
 	HandlerType: (*InternalServer)(nil),
@@ -267,6 +335,10 @@ var _Internal_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Accept",
 			Handler:    _Internal_Accept_Handler,
+		},
+		{
+			MethodName: "SysCmd",
+			Handler:    _Internal_SysCmd_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -117,15 +117,22 @@ message TableSetRequest {
 	string desc = 3;
 }
 
+message SysCmdRequest {
+	oneof cmd {
+		TableListRequest table_list = 16;
+		TableSetRequest table_set = 17;
+	};
+}
+
 service Public {
 	rpc Query (ObjectReader) returns (ObjectResult) {}
 	rpc Commit (ObjectWriter) returns (ObjectResult) {}
 	rpc BatchCommit (BatchRequest) returns (BatchResult) {}
+	rpc SysCmd (SysCmdRequest) returns (ObjectResult) {}
 }
 
 service Internal {
 	rpc Prepare (ObjectWriter) returns (ObjectResult) {}
 	rpc Accept (ObjectWriter) returns (ObjectResult) {}
-	// rpc TableList (TableListRequest) returns (ObjectResult) {}
-	// rpc TableSet (TableSetRequest) returns (ObjectResult) {}
+	rpc SysCmd (SysCmdRequest) returns (ObjectResult) {}
 }
