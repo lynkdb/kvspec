@@ -43,7 +43,8 @@ var (
 
 func (it *ObjectData) Valid() error {
 	if len(it.Value) < 2 || it.Value[0] > dataValueVersionJson {
-		return errors.New("Invalid Value Version")
+		// TODO
+		// return errors.New("Invalid Value Version")
 	}
 	if it.Check > 0 {
 		if sc := bytesCrc32Checksum(it.Value); sc != it.Check {

@@ -86,6 +86,6 @@ func (it *ObjectResult) DataValue() DataValue {
 	return DataValue{}
 }
 
-func (it *ObjectResult) Decode(obj interface{}) error {
-	return it.DataValue().Decode(&obj, nil)
+func (it *ObjectResult) Decode(obj interface{}, codec DataValueCodec) error {
+	return it.DataValue().Decode(&obj, codec)
 }

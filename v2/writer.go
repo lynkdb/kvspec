@@ -23,17 +23,23 @@ var (
 	incrNamespaceReg = regexp.MustCompile("^[a-z]{1}[a-z0-9_]{3,31}$")
 )
 
-// func NewObjectWriter(key []byte, value interface{}, codec DataValueCodec) *ObjectWriter {
-func NewObjectWriter(key []byte, value interface{}) *ObjectWriter {
+func NewObjectWriter(key []byte, value interface{}, opts ...interface{}) *ObjectWriter {
 	r := &ObjectWriter{
 		Meta: &ObjectMeta{
 			Key: key,
 		},
 	}
-	if value == nil {
-		return r
+	var codec DataValueCodec
+	for _, opt := range opts {
+		if opt == nil {
+			continue
+		}
+		switch opt.(type) {
+		case DataValueCodec:
+			codec = opt.(DataValueCodec)
+		}
 	}
-	return r.DataValueSet(value, nil)
+	return r.DataValueSet(value, codec)
 }
 
 func (it *ObjectWriter) TableNameSet(name string) *ObjectWriter {
@@ -91,9 +97,13 @@ func (it *ObjectWriter) DataValueSet(
 }
 
 func (it *ObjectWriter) PrevDataCheckSet(
-	value interface{}) *ObjectWriter {
+	value interface{}, codec DataValueCodec) *ObjectWriter {
 
 	if value != nil {
+
+		if codec == nil {
+			codec = dataValueCodecStd
+		}
 
 		bsValue, err := dataValueCodecStd.Encode(value)
 		if err == nil {
@@ -162,12 +172,6 @@ func (it *ObjectWriter) PutEncode() ([]byte, []byte, error) {
 	if err != nil {
 		return nil, nil, err
 	}
-
-	/**
-	if AttrAllow(it.Meta.Attrs, ObjectMetaAttrMetaOnly) {
-		return meta, nil, nil
-	}
-	*/
 
 	data, err := StdProto.Encode(it.Data)
 	if err != nil || len(data) < 1 {

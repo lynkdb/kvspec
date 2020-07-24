@@ -46,16 +46,17 @@ func (it *BatchRequest) KeyRangeQuery(offset, cutset []byte) *ObjectReader {
 	return r
 }
 
-func (it *BatchRequest) Put(key []byte, value interface{}) *ObjectWriter {
-	w := NewObjectWriter(key, value)
+func (it *BatchRequest) Put(key []byte, value interface{}, opts ...interface{}) *ObjectWriter {
+	w := NewObjectWriter(key, value, opts...)
 	it.Items = append(it.Items, &BatchItem{
 		Writer: w,
 	})
 	return w
 }
 
-func (it *BatchRequest) Create(key []byte, value interface{}) *ObjectWriter {
-	w := NewObjectWriter(key, value).ModeCreateSet(true)
+func (it *BatchRequest) Create(key []byte, value interface{}, opts ...interface{}) *ObjectWriter {
+	w := NewObjectWriter(key, value, opts...).
+		ModeCreateSet(true)
 	it.Items = append(it.Items, &BatchItem{
 		Writer: w,
 	})

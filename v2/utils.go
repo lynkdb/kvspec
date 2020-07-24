@@ -18,6 +18,7 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"errors"
+	"fmt"
 	"hash/crc32"
 	"time"
 
@@ -34,6 +35,16 @@ func AttrAppend(base, comp uint64) uint64 {
 
 func AttrRemove(base, comp uint64) uint64 {
 	return (base | comp) - (comp)
+}
+
+func AttrPrint(name string, base uint64) {
+	fmt.Print(name + "[")
+	for i := uint64(1); i < 64; i++ {
+		if AttrAllow(base, 1<<i) {
+			fmt.Print(" ", i)
+		}
+	}
+	fmt.Print(" ]\n")
 }
 
 func NewObjectItem(key []byte) *ObjectItem {

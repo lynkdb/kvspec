@@ -19,7 +19,7 @@ type ClientConnector interface {
 	Query(rq *ObjectReader) *ObjectResult
 	Commit(rq *ObjectWriter) *ObjectResult
 	NewReader(key []byte) *ClientReader
-	NewWriter(key []byte, value interface{}) *ClientWriter
+	NewWriter(key []byte, value interface{}, opts ...interface{}) *ClientWriter
 	Close() error
 }
 
@@ -83,12 +83,12 @@ type ClientWriter struct {
 	connector ClientConnector
 }
 
-func NewClientWriter(cn ClientConnector, key []byte, value interface{}) *ClientWriter {
-	w := &ClientWriter{
-		writer:    NewObjectWriter(key, value),
+func NewClientWriter(cn ClientConnector, key []byte, value interface{},
+	opts ...interface{}) *ClientWriter {
+	return &ClientWriter{
+		writer:    NewObjectWriter(key, value, opts...),
 		connector: cn,
 	}
-	return w.DataValueSet(value, nil)
 }
 
 func (it *ClientWriter) Commit() *ObjectResult {
@@ -120,8 +120,9 @@ func (it *ClientWriter) ExpireSet(v int64) *ClientWriter {
 	return it
 }
 
-func (it *ClientWriter) PrevDataCheckSet(v interface{}) *ClientWriter {
-	it.writer.PrevDataCheckSet(v)
+func (it *ClientWriter) PrevDataCheckSet(
+	value interface{}, codec DataValueCodec) *ClientWriter {
+	it.writer.PrevDataCheckSet(value, codec)
 	return it
 }
 

@@ -67,8 +67,9 @@ const (
 )
 
 const (
-	ObjectMetaAttrMetaOnly uint64 = 1 << 31
-	ObjectMetaAttrDelete   uint64 = 1 << 32
+	ObjectMetaAttrMetaOff uint64 = 1 << 8
+	ObjectMetaAttrDataOff uint64 = 1 << 9
+	ObjectMetaAttrDelete  uint64 = 1 << 32
 )
 
 const (
