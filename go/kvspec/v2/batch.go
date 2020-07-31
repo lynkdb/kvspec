@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package kvspec2
+package kvspec
 
 func NewBatchRequest(tableName string) *BatchRequest {
 	return &BatchRequest{

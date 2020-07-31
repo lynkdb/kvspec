@@ -14,10 +14,10 @@
 
 syntax = "proto3";
 
-package kvspec2;
+package lynkdb.kvspec.v2;
 
 option optimize_for = LITE_RUNTIME;
-option go_package = ".;kvspec2";
+option go_package = ".;kvspec";
 
 message ObjectMeta {
 	bytes key = 1;

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package kvspec2
+package kvspec
 
 import (
 	"errors"
@@ -86,6 +86,6 @@ func (it *ObjectResult) DataValue() DataValue {
 	return DataValue{}
 }
 
-func (it *ObjectResult) Decode(obj interface{}, codec DataValueCodec) error {
-	return it.DataValue().Decode(&obj, codec)
+func (it *ObjectResult) Decode(obj interface{}, opts ...interface{}) error {
+	return it.DataValue().Decode(&obj, opts...)
 }

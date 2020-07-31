@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package kvspec2
+package kvspec
 
 import (
 	"encoding/json"
@@ -139,7 +139,18 @@ func (v DataValue) Float64() float64 {
 	return 0
 }
 
-func (v DataValue) Decode(object interface{}, codec DataValueCodec) error {
+func (v DataValue) Decode(object interface{}, opts ...interface{}) error {
+
+	var codec DataValueCodec
+	for _, opt := range opts {
+		if opt == nil {
+			continue
+		}
+		switch opt.(type) {
+		case DataValueCodec:
+			codec = opt.(DataValueCodec)
+		}
+	}
 
 	if codec == nil {
 		codec = dataValueCodecStd

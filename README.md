@@ -1,6 +1,7 @@
 ## kvspec
 
-kvspec (Key-Value Specification) implements a universal interfaces and data types for Key-Value Storage Engine.
+lynkdb Key-Value Storage Engine Specification (a.k.a., kvspec) defines the basic data types and service APIs than support both REST and gRPC protocols.
+
 
 ## some implemented projects based on kvspec
 

@@ -12,15 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package kvspec2
+package kvspec
 
 import (
 	"bytes"
 )
 
-func NewObjectReader(key []byte) *ObjectReader {
+func NewObjectReader(keys ...[]byte) *ObjectReader {
 	r := &ObjectReader{}
-	return r.KeySet(key)
+	for _, k := range keys {
+		r.KeySet(k)
+	}
+	return r
 }
 
 func (it *ObjectReader) TableNameSet(name string) *ObjectReader {

@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//go:generate protoc --proto_path=./ --go_out=./ --go_opt=paths=source_relative --go-grpc_out=. kvspec2.proto
+//go:generate protoc --proto_path=./ --go_out=./ --go_opt=paths=source_relative --go-grpc_out=. kvspec.proto
 //--go:generate protobuf_slice "*.proto"
-//--go:generate sed -i "s/json:\"id,omitempty\"/json:\"id\"/g" kvspec2.pb.go
+//--go:generate sed -i "s/json:\"id,omitempty\"/json:\"id\"/g" kvspec.pb.go
 
-package kvspec2
+package kvspec
 
 import (
 	"fmt"
@@ -62,8 +62,8 @@ const (
 
 const (
 	ObjectReaderLimitNumMax  int64 = 10000
-	ObjectReaderLimitSizeMax int64 = 8 * 1024 * 1024
-	ObjectReaderLimitSizeDef int64 = ObjectReaderLimitSizeMax
+	ObjectReaderLimitSizeMax int64 = 8 * MiB
+	ObjectReaderLimitSizeDef int64 = 8 * MiB
 )
 
 const (
