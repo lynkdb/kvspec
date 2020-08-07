@@ -23,6 +23,12 @@ type ClientOptions struct {
 	Timeout ClientTimeout `toml:"timeout" json:"timeout"`
 }
 
+func DefaultClientOptions() *ClientOptions {
+	return &ClientOptions{
+		Timeout: 10000,
+	}
+}
+
 func (it *ClientOptions) Apply(opts *ClientOptions) {
 	if it.Timeout > 0 {
 		it.Timeout.Apply(opts)

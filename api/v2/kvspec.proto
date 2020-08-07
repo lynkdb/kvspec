@@ -102,6 +102,7 @@ message TableStatus {
 	string name = 2;
 	uint64 key_num = 5;
 	uint64 db_size = 6;
+	map<string, int64> options = 15;
 }
 
 message TableListRequest {

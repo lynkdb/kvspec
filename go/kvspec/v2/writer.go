@@ -130,6 +130,10 @@ func (it *ObjectWriter) CommitValid() error {
 		return nil
 	}
 
+	if it.Meta.IncrId > 0 && it.IncrNamespace == "" {
+		it.IncrNamespace = "meta"
+	}
+
 	if (it.Meta.IncrId > 0 || it.IncrNamespace != "") &&
 		!incrNamespaceReg.MatchString(it.IncrNamespace) {
 		return errors.New("Invalid IncrNamespace")

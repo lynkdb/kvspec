@@ -29,6 +29,7 @@ type Client interface {
 	NewWriter(key []byte, value interface{}, opts ...interface{}) *ClientWriter
 	OpenTable(tableName string) ClientTable
 	OptionApply(opts ...ClientOption)
+	Connector() ClientConnector
 	Close() error
 }
 
@@ -184,7 +185,7 @@ func NewClient(cc ClientConnector, opts ...ClientOption) (Client, error) {
 
 	c := &client{
 		cc:   cc,
-		opts: new(ClientOptions),
+		opts: DefaultClientOptions(),
 	}
 
 	c.OptionApply(opts...)
@@ -211,6 +212,14 @@ func (it *client) OpenTable(tableName string) ClientTable {
 		client:    it,
 		tableName: tableName,
 	}
+}
+
+func (it *client) SysCmd(req *SysCmdRequest) *ObjectResult {
+	return it.cc.SysCmd(req)
+}
+
+func (it *client) Connector() ClientConnector {
+	return it.cc
 }
 
 func (it *client) Close() error {
