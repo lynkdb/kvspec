@@ -119,10 +119,8 @@ message TableSetRequest {
 }
 
 message SysCmdRequest {
-	oneof cmd {
-		TableListRequest table_list = 16;
-		TableSetRequest table_set = 17;
-	};
+	string method = 2;
+	bytes body = 3;
 }
 
 service Public {

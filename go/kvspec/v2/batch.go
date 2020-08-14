@@ -14,6 +14,10 @@
 
 package kvspec
 
+import (
+	"fmt"
+)
+
 func NewBatchRequest(tableName string) *BatchRequest {
 	return &BatchRequest{
 		TableName: tableName,
@@ -85,6 +89,14 @@ func (it *BatchRequest) NewResult(status uint64, errMessage string) *BatchResult
 	*/
 
 	return rs
+}
+
+func NewBatchResultAccessDenied(args ...interface{}) *BatchResult {
+	msg := "Access Denied"
+	if len(args) > 0 {
+		msg += " : " + fmt.Sprint(args...)
+	}
+	return &BatchResult{Status: ResultClientError, Message: msg}
 }
 
 func (it *BatchResult) OK() bool {

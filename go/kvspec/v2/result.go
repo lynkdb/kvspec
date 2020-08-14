@@ -16,6 +16,7 @@ package kvspec
 
 import (
 	"errors"
+	"fmt"
 )
 
 const (
@@ -56,6 +57,17 @@ func NewObjectResultNotFound() *ObjectResult {
 
 func NewObjectResultClientError(err error) *ObjectResult {
 	return NewObjectResult(ResultClientError, err)
+}
+
+func NewObjectResultAccessDenied(args ...interface{}) *ObjectResult {
+	msg := "Access Denied"
+	if len(args) > 0 {
+		msg += " : " + fmt.Sprint(args...)
+	}
+	return &ObjectResult{
+		Status:  ResultClientError,
+		Message: msg,
+	}
 }
 
 func NewObjectResultServerError(err error) *ObjectResult {

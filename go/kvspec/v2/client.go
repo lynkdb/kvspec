@@ -14,6 +14,10 @@
 
 package kvspec
 
+import (
+	"github.com/golang/protobuf/proto"
+)
+
 // Client Connector APIs
 type ClientConnector interface {
 	Query(req *ObjectReader) *ObjectResult
@@ -236,4 +240,14 @@ type clientTable struct {
 
 func (it *clientTable) NewBatch() *ClientBatch {
 	return NewClientBatch(it.client.cc, it.tableName)
+}
+
+func NewSysCmdRequest(method string, msg proto.Message) *SysCmdRequest {
+	req := &SysCmdRequest{
+		Method: method,
+	}
+	if msg != nil {
+		req.Body, _ = StdProto.Encode(msg)
+	}
+	return req
 }
