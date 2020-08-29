@@ -52,6 +52,7 @@ message ObjectReader {
 	bytes key_offset = 12;
 	bytes key_cutset = 13;
 	uint64 log_offset = 14;
+	int64 wait_time = 16;
 }
 
 message ObjectWriter {
