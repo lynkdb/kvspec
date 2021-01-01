@@ -19,27 +19,11 @@
 package kvspec
 
 import (
-	"fmt"
 	"regexp"
-
-	"github.com/lessos/lessgo/encoding/json"
 )
-
-func ObjPrint(name string, obj interface{}) {
-	js, _ := json.Encode(obj, "")
-	fmt.Println(name, string(js))
-}
 
 var (
 	TableNameReg = regexp.MustCompile("^[a-z]{1}[a-z0-9_]{3,31}$")
-)
-
-const (
-	KiB = int64(1024)
-	MiB = KiB * 1024
-	GiB = MiB * 1024
-	TiB = GiB * 1024
-	PiB = TiB * 1024
 )
 
 const (

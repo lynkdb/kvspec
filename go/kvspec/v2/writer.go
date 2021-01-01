@@ -16,12 +16,28 @@ package kvspec
 
 import (
 	"errors"
+	"fmt"
 	"regexp"
+
+	"github.com/lessos/lessgo/encoding/json"
 )
 
 var (
 	incrNamespaceReg = regexp.MustCompile("^[a-z]{1}[a-z0-9_]{3,31}$")
 )
+
+const (
+	KiB = int64(1024)
+	MiB = KiB * 1024
+	GiB = MiB * 1024
+	TiB = GiB * 1024
+	PiB = TiB * 1024
+)
+
+func ObjPrint(name string, obj interface{}) {
+	js, _ := json.Encode(obj, "")
+	fmt.Println(name, string(js))
+}
 
 func NewObjectWriter(key []byte, value interface{}, opts ...interface{}) *ObjectWriter {
 	r := &ObjectWriter{
