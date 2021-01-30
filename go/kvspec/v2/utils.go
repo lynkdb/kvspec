@@ -192,3 +192,7 @@ func Uint64ToBytes(v uint64) []byte {
 func timems() uint64 {
 	return uint64(time.Now().UnixNano() / 1e6)
 }
+
+func timeus() uint64 {
+	return uint64(time.Now().UnixNano() / 1e3)
+}

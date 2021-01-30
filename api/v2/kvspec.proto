@@ -20,144 +20,157 @@ option optimize_for = LITE_RUNTIME;
 option go_package = ".;kvspec";
 
 message ObjectMeta {
-	bytes key = 1;
-	uint64 version = 2;
-	uint64 incr_id = 3;
-	uint64 created = 4;
-	uint64 updated = 5;
-	uint64 attrs = 6;
-	uint64 expired = 11;
-	uint64 data_attrs = 12;
-	uint64 data_check = 13;
+  bytes key = 1;
+  uint64 version = 2;
+  uint64 incr_id = 3;
+  uint64 created = 4;
+  uint64 updated = 5;
+  uint64 attrs = 6;
+  uint64 expired = 11;
+  uint64 data_attrs = 12;
+  uint64 data_check = 13;
 }
 
 message ObjectData {
-	uint64 attrs = 8;
-	uint64 check = 9;
-	bytes value = 10;
+  uint64 attrs = 8;
+  uint64 check = 9;
+  bytes value = 10;
 }
 
 message ObjectItem {
-	ObjectMeta meta = 2;
-	ObjectData data = 3;
+  ObjectMeta meta = 2;
+  ObjectData data = 3;
 }
 
 message ObjectReader {
-	uint64 mode = 1;
-	repeated bytes keys = 2;
-	string table_name = 4;
-	uint64 attrs = 6;
-	int64 limit_num = 8;
-	int64 limit_size = 9;
-	bytes key_offset = 12;
-	bytes key_cutset = 13;
-	uint64 log_offset = 14;
-	int64 wait_time = 16;
+  uint64 mode = 1;
+  repeated bytes keys = 2;
+  string table_name = 4;
+  uint64 attrs = 6;
+  int64 limit_num = 8;
+  int64 limit_size = 9;
+  bytes key_offset = 12;
+  bytes key_cutset = 13;
+  uint64 log_offset = 14;
+  int64 wait_time = 16;
 }
 
 message ObjectWriter {
-	uint64 mode = 1;
-	ObjectMeta meta = 2;
-	ObjectData data = 3;
-	string table_name = 4;
-	uint64 prev_version = 5;
-	uint64 prev_data_check = 6;
-	string incr_namespace = 7;
-	uint64 prev_attrs = 8;
-	uint64 prev_incr_id = 9;
-	uint64 proposal_expired = 16;
+  uint64 mode = 1;
+  ObjectMeta meta = 2;
+  ObjectData data = 3;
+  string table_name = 4;
+  uint64 prev_version = 5;
+  uint64 prev_data_check = 6;
+  string incr_namespace = 7;
+  uint64 prev_attrs = 8;
+  uint64 prev_incr_id = 9;
+  uint64 proposal_expired = 16;
 }
 
 message ObjectResult {
-	uint64 status = 1;
-	string message = 2;
-	ObjectMeta meta = 8;
-	repeated ObjectItem items = 9;
-	bool next = 12;
+  uint64 status = 1;
+  string message = 2;
+  ObjectMeta meta = 8;
+  repeated ObjectItem items = 9;
+  bool next = 12;
 }
 
 message BatchRequest {
-	string table_name = 3;
-	repeated BatchItem items = 9;
+  string table_name = 3;
+  repeated BatchItem items = 9;
 }
 
 message BatchItem {
-	string name = 1;
-	ObjectReader reader = 8;
-	ObjectWriter writer = 9;
+  string name = 1;
+  ObjectReader reader = 8;
+  ObjectWriter writer = 9;
 }
 
 message BatchResult {
-	uint64 status = 1;
-	string message = 2;
-	repeated ObjectResult items = 9;
+  uint64 status = 1;
+  string message = 2;
+  repeated ObjectResult items = 9;
 }
 
 message TableItem {
-	string name = 2;
-	string desc = 3;
-	TableStatus status = 4;
+  string name = 2;
+  string desc = 3;
+  TableStatus status = 4;
 }
 
 message TableStatus {
-	string name = 2;
-	uint64 key_num = 5;
-	uint64 db_size = 6;
-	map<string, int64> options = 15;
+  string name = 2;
+  uint64 key_num = 5;
+  uint64 db_size = 6;
+  map<string, int64> options = 15;
 }
 
-message TableListRequest {
-	string query = 1;
-}
+message TableListRequest { string query = 1; }
 
-message TableListResult {
-	repeated TableItem items = 3;
-}
+message TableListResult { repeated TableItem items = 3; }
 
 message TableSetRequest {
-	string name = 2;
-	string desc = 3;
+  string name = 2;
+  string desc = 3;
 }
 
 message SysCmdRequest {
-	string method = 2;
-	bytes body = 3;
+  string method = 2;
+  bytes body = 3;
 }
 
 message SysCapacity {
-	int64 use = 1;
-	int64 min = 2;
-	int64 max = 3;
+  int64 use = 1;
+  int64 min = 2;
+  int64 max = 3;
 }
 
 message SysNodeStatus {
-	string id = 1;
-	string addr = 2;
-	string version = 11;
-	int64 uptime = 12;
-	int64 updated = 13;
-	map<string, SysCapacity> caps = 14;
-	map<string, string> props = 15;
+  string id = 1;
+  string addr = 2;
+  string version = 11;
+  int64 uptime = 12;
+  int64 updated = 13;
+  map<string, SysCapacity> caps = 14;
+  map<string, string> props = 15;
 }
 
 message SysStatus {
-	string id = 1;
-	repeated SysNodeStatus nodes = 8;
-	repeated TableStatus tables = 9;
-	map<string, SysCapacity> caps = 14;
-	map<string, string> props = 15;
+  string id = 1;
+  repeated SysNodeStatus nodes = 8;
+  repeated TableStatus tables = 9;
+  map<string, SysCapacity> caps = 14;
+  map<string, string> props = 15;
 }
 
+message LogSyncRequest {
+  string addr = 2;
+  string table_name = 3;
+  uint64 log_offset = 5;
+  uint64 log_cutset = 6;
+  repeated bytes keys = 9;
+}
+
+message LogSyncReply {
+  uint64 action = 4;
+  uint64 log_offset = 5;
+  uint64 log_cutset = 6;
+  repeated ObjectMeta logs = 8;
+  repeated ObjectItem items = 9;
+  repeated bytes next_keys = 10;
+}
 
 service Public {
-	rpc Query (ObjectReader) returns (ObjectResult) {}
-	rpc Commit (ObjectWriter) returns (ObjectResult) {}
-	rpc BatchCommit (BatchRequest) returns (BatchResult) {}
-	rpc SysCmd (SysCmdRequest) returns (ObjectResult) {}
+  rpc Query(ObjectReader) returns (ObjectResult) {}
+  rpc Commit(ObjectWriter) returns (ObjectResult) {}
+  rpc BatchCommit(BatchRequest) returns (BatchResult) {}
+  rpc SysCmd(SysCmdRequest) returns (ObjectResult) {}
 }
 
 service Internal {
-	rpc Prepare (ObjectWriter) returns (ObjectResult) {}
-	rpc Accept (ObjectWriter) returns (ObjectResult) {}
-	rpc SysCmd (SysCmdRequest) returns (ObjectResult) {}
+  rpc Prepare(ObjectWriter) returns (ObjectResult) {}
+  rpc Accept(ObjectWriter) returns (ObjectResult) {}
+  rpc LogSync(LogSyncRequest) returns (LogSyncReply) {}
+  rpc SysCmd(SysCmdRequest) returns (ObjectResult) {}
 }

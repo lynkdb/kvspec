@@ -203,6 +203,7 @@ var _Public_serviceDesc = grpc.ServiceDesc{
 type InternalClient interface {
 	Prepare(ctx context.Context, in *ObjectWriter, opts ...grpc.CallOption) (*ObjectResult, error)
 	Accept(ctx context.Context, in *ObjectWriter, opts ...grpc.CallOption) (*ObjectResult, error)
+	LogSync(ctx context.Context, in *LogSyncRequest, opts ...grpc.CallOption) (*LogSyncReply, error)
 	SysCmd(ctx context.Context, in *SysCmdRequest, opts ...grpc.CallOption) (*ObjectResult, error)
 }
 
@@ -232,6 +233,15 @@ func (c *internalClient) Accept(ctx context.Context, in *ObjectWriter, opts ...g
 	return out, nil
 }
 
+func (c *internalClient) LogSync(ctx context.Context, in *LogSyncRequest, opts ...grpc.CallOption) (*LogSyncReply, error) {
+	out := new(LogSyncReply)
+	err := c.cc.Invoke(ctx, "/lynkdb.kvspec.v2.Internal/LogSync", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *internalClient) SysCmd(ctx context.Context, in *SysCmdRequest, opts ...grpc.CallOption) (*ObjectResult, error) {
 	out := new(ObjectResult)
 	err := c.cc.Invoke(ctx, "/lynkdb.kvspec.v2.Internal/SysCmd", in, out, opts...)
@@ -247,6 +257,7 @@ func (c *internalClient) SysCmd(ctx context.Context, in *SysCmdRequest, opts ...
 type InternalServer interface {
 	Prepare(context.Context, *ObjectWriter) (*ObjectResult, error)
 	Accept(context.Context, *ObjectWriter) (*ObjectResult, error)
+	LogSync(context.Context, *LogSyncRequest) (*LogSyncReply, error)
 	SysCmd(context.Context, *SysCmdRequest) (*ObjectResult, error)
 	mustEmbedUnimplementedInternalServer()
 }
@@ -260,6 +271,9 @@ func (*UnimplementedInternalServer) Prepare(context.Context, *ObjectWriter) (*Ob
 }
 func (*UnimplementedInternalServer) Accept(context.Context, *ObjectWriter) (*ObjectResult, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Accept not implemented")
+}
+func (*UnimplementedInternalServer) LogSync(context.Context, *LogSyncRequest) (*LogSyncReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LogSync not implemented")
 }
 func (*UnimplementedInternalServer) SysCmd(context.Context, *SysCmdRequest) (*ObjectResult, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SysCmd not implemented")
@@ -306,6 +320,24 @@ func _Internal_Accept_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Internal_LogSync_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LogSyncRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InternalServer).LogSync(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/lynkdb.kvspec.v2.Internal/LogSync",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InternalServer).LogSync(ctx, req.(*LogSyncRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Internal_SysCmd_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SysCmdRequest)
 	if err := dec(in); err != nil {
@@ -335,6 +367,10 @@ var _Internal_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Accept",
 			Handler:    _Internal_Accept_Handler,
+		},
+		{
+			MethodName: "LogSync",
+			Handler:    _Internal_LogSync_Handler,
 		},
 		{
 			MethodName: "SysCmd",
