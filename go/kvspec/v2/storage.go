@@ -125,6 +125,10 @@ type StorageEngine interface {
 
 // StorageIterator is the interface that wraps iterator methods.
 type StorageIterator interface {
+	// Valid iterator is either positioned at a key/value pair, or
+	// not valid.  This method returns true iff the iterator is valid.
+	Valid() bool
+
 	// First moves the iterator to the first key/value pair. If the iterator
 	// only contains one key/value pair then First and Last would moves
 	// to the same key/value pair.
