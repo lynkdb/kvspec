@@ -19,8 +19,8 @@ type StorageOptions struct {
 
 	// WriteBufferSize defines maximum memory size of the journal before flushed to disk.
 	//
-	// The default value is 4 MiB.
-	WriteBufferSize int `toml:"write_buffer_size" json:"write_buffer_size" desc:"in MiB, default to 4"`
+	// The default value is 8 MiB.
+	WriteBufferSize int `toml:"write_buffer_size" json:"write_buffer_size" desc:"in MiB, default to 8"`
 
 	// BlockCacheSize defines the capacity of the 'sorted table' block caching.
 	//
@@ -29,8 +29,8 @@ type StorageOptions struct {
 
 	// MaxTableSize limits size of 'sorted table' that compaction generates.
 	//
-	// The default value is 2 MiB.
-	MaxTableSize int `toml:"max_table_size" json:"max_table_size" desc:"in MiB, default to 2"`
+	// The default value is 8 MiB.
+	MaxTableSize int `toml:"max_table_size" json:"max_table_size" desc:"in MiB, default to 8"`
 
 	// MaxOpenFiles defines the capacity of the open files caching.
 	//
@@ -174,26 +174,34 @@ type StorageEngineOpen func(path string, opts *StorageOptions) (StorageEngine, e
 
 func (it *StorageOptions) Reset() *StorageOptions {
 
-	if it.WriteBufferSize < 4 {
-		it.WriteBufferSize = 4
-	} else if it.WriteBufferSize > 128 {
-		it.WriteBufferSize = 128
+	if it.WriteBufferSize == 0 {
+		it.WriteBufferSize = 8
+	} else if it.WriteBufferSize < 2 {
+		it.WriteBufferSize = 2
+	} else if it.WriteBufferSize > 256 {
+		it.WriteBufferSize = 256
 	}
 
-	if it.BlockCacheSize < 8 {
+	if it.BlockCacheSize == 0 {
 		it.BlockCacheSize = 8
-	} else if it.BlockCacheSize > 4096 {
-		it.BlockCacheSize = 4096
+	} else if it.BlockCacheSize < 2 {
+		it.BlockCacheSize = 2
+	} else if it.BlockCacheSize > 64 {
+		it.BlockCacheSize = 64
 	}
 
-	if it.MaxTableSize < 2 {
+	if it.MaxTableSize == 0 {
+		it.MaxTableSize = 8
+	} else if it.MaxTableSize < 2 {
 		it.MaxTableSize = 2
 	} else if it.MaxTableSize > 64 {
 		it.MaxTableSize = 64
 	}
 
-	if it.MaxOpenFiles < 500 {
+	if it.MaxOpenFiles == 0 {
 		it.MaxOpenFiles = 500
+	} else if it.MaxOpenFiles < 100 {
+		it.MaxOpenFiles = 100
 	} else if it.MaxOpenFiles > 10000 {
 		it.MaxOpenFiles = 10000
 	}
