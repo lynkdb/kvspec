@@ -90,6 +90,9 @@ type StorageBatch interface {
 	// Len returns number of records in the batch.
 	Len() int
 
+	// Reset resets the batch.
+	Reset()
+
 	// Commit apply the given batch to the DB. The batch records will be applied
 	// sequentially.
 	Commit() error

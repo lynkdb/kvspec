@@ -45,7 +45,7 @@ const (
 )
 
 const (
-	ObjectReaderLimitNumMax  int64 = 10000
+	ObjectReaderLimitNumMax  int64 = 100000
 	ObjectReaderLimitSizeMax int64 = 8 * MiB
 	ObjectReaderLimitSizeDef int64 = 8 * MiB
 )
