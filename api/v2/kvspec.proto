@@ -145,6 +145,7 @@ message SysStatus {
 }
 
 message LogSyncRequest {
+  string server_id = 1;
   string addr = 2;
   string table_name = 3;
   uint64 log_offset = 5;
