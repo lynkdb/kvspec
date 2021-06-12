@@ -148,9 +148,10 @@ message LogSyncRequest {
   string server_id = 1;
   string addr = 2;
   string table_name = 3;
+  uint64 attrs = 4;
   uint64 log_offset = 5;
-  uint64 log_cutset = 6;
-  repeated bytes keys = 9;
+  bytes key_offset = 7;
+  repeated ObjectMeta keys = 9;
 }
 
 message LogSyncReply {
@@ -159,7 +160,7 @@ message LogSyncReply {
   uint64 log_cutset = 6;
   repeated ObjectMeta logs = 8;
   repeated ObjectItem items = 9;
-  repeated bytes next_keys = 10;
+  repeated ObjectMeta next_keys = 10;
 }
 
 service Public {
