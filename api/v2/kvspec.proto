@@ -73,6 +73,7 @@ message ObjectResult {
   string message = 2;
   ObjectMeta meta = 8;
   repeated ObjectItem items = 9;
+  uint64 log_version = 11;
   bool next = 12;
 }
 
