@@ -90,7 +90,7 @@ func (it *ClientReader) ModeRevRangeSet(v bool) *ClientReader {
 }
 
 func (it *ClientReader) LogOffsetSet(logOffset uint64) *ClientReader {
-	it.LogOffsetSet(logOffset)
+	it.ObjectReader.LogOffsetSet(logOffset)
 	return it
 }
 
