@@ -23,7 +23,7 @@ import (
 )
 
 var (
-	TableNameReg = regexp.MustCompile("^[a-z]{1}[a-z0-9_]{3,31}$")
+	TableNameReg = regexp.MustCompile("^[a-z]{1}[a-z0-9\\-\\_\\/\\:\\.]{3,63}$")
 )
 
 const (
