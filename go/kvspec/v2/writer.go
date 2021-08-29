@@ -63,6 +63,11 @@ func (it *ObjectWriter) TableNameSet(name string) *ObjectWriter {
 	return it
 }
 
+func (it *ObjectWriter) IncrNamespaceSet(ns string) *ObjectWriter {
+	it.IncrNamespace = ns
+	return it
+}
+
 func (it *ObjectWriter) ModeCreateSet(v bool) *ObjectWriter {
 	it.Mode = it.Mode | ObjectWriterModeCreate
 	if !v {
@@ -71,16 +76,16 @@ func (it *ObjectWriter) ModeCreateSet(v bool) *ObjectWriter {
 	return it
 }
 
-func (it *ObjectWriter) IncrNamespaceSet(ns string) *ObjectWriter {
-	it.IncrNamespace = ns
-	return it
-}
-
 func (it *ObjectWriter) ModeDeleteSet(v bool) *ObjectWriter {
 	it.Mode = it.Mode | ObjectWriterModeDelete
 	if !v {
 		it.Mode = it.Mode - ObjectWriterModeDelete
 	}
+	return it
+}
+
+func (it *ObjectWriter) ModeSet(m uint64) *ObjectWriter {
+	it.Mode = it.Mode | m
 	return it
 }
 

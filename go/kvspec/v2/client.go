@@ -136,6 +136,11 @@ func (it *ClientWriter) ModeDeleteSet(v bool) *ClientWriter {
 	return it
 }
 
+func (it *ClientWriter) ModeSet(m uint64) *ClientWriter {
+	it.ObjectWriter.ModeSet(m)
+	return it
+}
+
 func (it *ClientWriter) ExpireSet(v int64) *ClientWriter {
 	it.ObjectWriter.ExpireSet(v)
 	return it
