@@ -175,7 +175,7 @@ func (it *ObjectWriter) CommitValid() error {
 
 	if it.Meta.Expired > 0 &&
 		it.Meta.Expired <= it.Meta.Updated {
-		return errors.New("Invalid Meta/Expired")
+		// return errors.New("Invalid Meta/Expired")
 	}
 
 	return nil
