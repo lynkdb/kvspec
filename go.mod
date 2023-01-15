@@ -1,4 +1,4 @@
-module github.com/lynkdb/kvspec/go/kvspec/v2
+module github.com/lynkdb/kvspec/v2
 
 go 1.19
 
