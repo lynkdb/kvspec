@@ -29,6 +29,9 @@ var (
 const (
 	// 1:version|1:meta-size|meta-bytes|data-bytes
 	objectRawBytesVersion1 uint8 = 2
+
+	// 1:version|2:meta-size|meta-bytes|data-bytes
+	objectRawBytesVersion2 uint8 = 3
 )
 
 const (
@@ -59,7 +62,7 @@ const (
 
 const (
 	objectMetaKeyLenMin int = 1
-	objectMetaKeyLenMax int = 128
+	objectMetaKeyLenMax int = 256
 )
 
 const (

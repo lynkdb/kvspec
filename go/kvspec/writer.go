@@ -15,6 +15,7 @@
 package kvspec
 
 import (
+	"encoding/binary"
 	"errors"
 	"fmt"
 	"regexp"
@@ -142,7 +143,7 @@ func (it *ObjectWriter) CommitValid() error {
 	}
 
 	if !objectMetaKeyValid(it.Meta.Key) {
-		return errors.New("Invalid Meta/Key")
+		return fmt.Errorf("Invalid Meta/Key (len %d)", len(it.Meta.Key))
 	}
 
 	if AttrAllow(it.Mode, ObjectWriterModeDelete) {
@@ -185,7 +186,13 @@ func (it *ObjectWriter) MetaEncode() ([]byte, error) {
 
 	meta, err := StdProto.Encode(it.Meta)
 	if err == nil && len(meta) > 0 {
-		return append([]byte{objectRawBytesVersion1, uint8(len(meta))}, meta...), nil
+		if len(meta) < 256 {
+			return append([]byte{objectRawBytesVersion1, uint8(len(meta))}, meta...), nil
+		} else if len(meta) <= (objectMetaKeyLenMax + 100) {
+			b := make([]byte, 2)
+			binary.BigEndian.PutUint16(b, uint16(len(meta)))
+			return append([]byte{objectRawBytesVersion2, b[0], b[1]}, meta...), nil
+		}
 	}
 
 	return nil, errors.New("invalid meta")

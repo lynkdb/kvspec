@@ -87,19 +87,31 @@ func (it *ObjectItem) Decode(obj interface{}) error {
 	return it.DataValue().Decode(&obj, nil)
 }
 
-func ObjectMetaDecode(bs []byte) (*ObjectMeta, error) {
+func ObjectMetaDecode(bs []byte) (*ObjectMeta, int, error) {
 
-	if len(bs) > 2 &&
-		bs[0] == objectRawBytesVersion1 &&
-		bs[1] > 0 && (int(bs[1])+2) <= len(bs) {
-		var meta ObjectMeta
-		if err := StdProto.Decode(bs[2:(int(bs[1])+2)], &meta); err == nil {
-			return &meta, nil
-		} else {
-			return nil, err
+	if len(bs) > 2 {
+		switch bs[0] {
+		case objectRawBytesVersion1:
+			if bs[1] > 0 && (int(bs[1])+2) <= len(bs) {
+				var meta ObjectMeta
+				if err := StdProto.Decode(bs[2:(int(bs[1])+2)], &meta); err == nil {
+					return &meta, int(bs[1]) + 2, nil
+				} else {
+					return nil, 0, err
+				}
+			}
+		case objectRawBytesVersion2:
+			if len(bs) > 3 {
+				if ms := binary.BigEndian.Uint16(bs[1:3]); ms > 0 && int(ms+3) <= len(bs) {
+					var meta ObjectMeta
+					if err := StdProto.Decode(bs[3:int(ms+3)], &meta); err == nil {
+						return &meta, int(ms + 3), nil
+					}
+				}
+			}
 		}
 	}
-	return nil, errors.New("Invalid Meta/Bytes")
+	return nil, 0, errors.New("Invalid Meta/Bytes")
 }
 
 func objectMetaKeyValid(key []byte) bool {
@@ -128,12 +140,11 @@ func objectMetaKeyValid(key []byte) bool {
 
 func ObjectItemDecode(bs []byte) (*ObjectItem, error) {
 
-	meta, err := ObjectMetaDecode(bs)
+	meta, offset, err := ObjectMetaDecode(bs)
 	if err != nil {
 		return nil, err
 	}
 
-	offset := int(bs[1]) + 2
 	if offset >= len(bs) {
 		return nil, errors.New("Invalid Data/Bytes")
 	}
