@@ -189,8 +189,8 @@ func (it *StorageOptions) Reset() *StorageOptions {
 		it.BlockCacheSize = 8
 	} else if it.BlockCacheSize < 2 {
 		it.BlockCacheSize = 2
-	} else if it.BlockCacheSize > 64 {
-		it.BlockCacheSize = 64
+	} else if it.BlockCacheSize > 1024 {
+		it.BlockCacheSize = 1024
 	}
 
 	if it.MaxTableSize == 0 {
