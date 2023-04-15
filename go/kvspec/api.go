@@ -46,6 +46,7 @@ const (
 	ObjectReaderModeKeyRange uint64 = 1 << 1
 	ObjectReaderModeLogRange uint64 = 1 << 2
 	ObjectReaderModeRevRange uint64 = 1 << 3
+	ObjectReaderModeMetaOnly uint64 = 1 << 8
 )
 
 const (

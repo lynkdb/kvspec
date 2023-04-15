@@ -145,19 +145,19 @@ func ObjectItemDecode(bs []byte) (*ObjectItem, error) {
 		return nil, err
 	}
 
-	if offset >= len(bs) {
-		return nil, errors.New("Invalid Data/Bytes")
-	}
-
-	var data ObjectData
-	if err := StdProto.Decode(bs[offset:], &data); err != nil {
-		return nil, err
-	}
-
-	return &ObjectItem{
+	obj := &ObjectItem{
 		Meta: meta,
-		Data: &data,
-	}, nil
+	}
+
+	if offset < len(bs) {
+		var data ObjectData
+		if err := StdProto.Decode(bs[offset:], &data); err != nil {
+			return nil, err
+		}
+		obj.Data = &data
+	}
+
+	return obj, nil
 }
 
 func bytesCrc32Checksum(bs []byte) uint64 {
