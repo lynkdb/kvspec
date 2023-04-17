@@ -35,10 +35,11 @@ const (
 )
 
 const (
-	ObjectWriterModePut    uint64 = 1 << 0
-	ObjectWriterModeCreate uint64 = 1 << 1
-	ObjectWriterModeDelete uint64 = 1 << 2
-	ObjectWriterModeLogOff uint64 = 1 << 8
+	ObjectWriterModePut            uint64 = 1 << 0
+	ObjectWriterModeCreate         uint64 = 1 << 1
+	ObjectWriterModeDelete         uint64 = 1 << 2
+	ObjectWriterModeLogOff         uint64 = 1 << 8
+	ObjectWriterModeDeleteDataOnly uint64 = 1 << 16
 )
 
 const (
