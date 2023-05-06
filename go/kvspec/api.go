@@ -63,8 +63,9 @@ const (
 )
 
 const (
-	objectMetaKeyLenMin int = 1
-	objectMetaKeyLenMax int = 256
+	objectMetaKeyLenMin   int = 1
+	objectMetaKeyLenMax   int = 256
+	objectMetaExtraLenMax int = 128
 )
 
 const (

@@ -22,7 +22,7 @@ import (
 	"hash/crc32"
 	"time"
 
-	"github.com/golang/protobuf/proto"
+	"google.golang.org/protobuf/proto"
 )
 
 func AttrAllow(base, comp uint64) bool {

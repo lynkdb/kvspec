@@ -19,7 +19,7 @@ import (
 	"errors"
 	"strconv"
 
-	"github.com/golang/protobuf/proto"
+	"google.golang.org/protobuf/proto"
 )
 
 const (

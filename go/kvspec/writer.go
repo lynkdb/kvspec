@@ -136,6 +136,25 @@ func (it *ObjectWriter) PrevDataCheckSet(
 	return it
 }
 
+func (it *ObjectWriter) ExtraSet(extra interface{}) *ObjectWriter {
+
+	if extra != nil {
+
+		switch extra.(type) {
+		case []byte:
+			it.Meta.Extra = extra.([]byte)
+
+			// case proto.Message:
+			// 	it.Meta.Extra, _ = StdProto.Encode(extra.(proto.Message))
+
+			// default:
+			// 	it.Meta.Extra, _ = json.Encode(extra, "")
+		}
+	}
+
+	return it
+}
+
 func (it *ObjectWriter) CommitValid() error {
 
 	if it.Meta == nil {
@@ -144,6 +163,10 @@ func (it *ObjectWriter) CommitValid() error {
 
 	if !objectMetaKeyValid(it.Meta.Key) {
 		return fmt.Errorf("Invalid Meta/Key (len %d)", len(it.Meta.Key))
+	}
+
+	if len(it.Meta.Extra) > objectMetaExtraLenMax {
+		return fmt.Errorf("Invalid Meta/Extra (len %d)", len(it.Meta.Extra))
 	}
 
 	if AttrAllow(it.Mode, ObjectWriterModeDelete) {
