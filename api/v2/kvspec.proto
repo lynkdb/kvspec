@@ -29,6 +29,7 @@ message ObjectMeta {
   uint64 expired = 11;
   uint64 data_attrs = 12;
   uint64 data_check = 13;
+  bytes extra = 15;
 }
 
 message ObjectData {
